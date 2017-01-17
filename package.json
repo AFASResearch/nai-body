@@ -1,0 +1,34 @@
+{
+  "name": "nai-body",
+  "version": "1.0.0",
+  "description": "Nodejs program that runs on the raspberry pi which is embedded in the Nai robot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AFASResearch/nai-body.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AFASResearch/nai-body/issues"
+  },
+  "homepage": "https://github.com/AFASResearch/nai-body#readme",
+  "dependencies": {
+    "@types/node": "7.0.0",
+    "@types/onoff": "0.0.27",
+    "firebase": "^3.6.5",
+    "firebase-admin": "^4.0.4",
+    "node-cron": "1.1.2",
+    "node-fetch": "1.6.3",
+    "raspi": "3.0.4",
+    "typescript": "^2.1.5"
+  },
+  "optionalDependencies": {
+    "mcp-spi-adc": "0.3.1",
+    "onoff": "1.1.1",
+    "raspi-pwm": "3.1.2"
+  }
+}
