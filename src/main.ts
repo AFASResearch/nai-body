@@ -6,6 +6,11 @@ import { firebase } from './firebase';
 firebase.initialize();
 
 firebase.onActuatorsUpdate((actuatorData) => {
+  console.log('updating actuators', JSON.stringify({
+    alarm: actuatorData.alarm, 
+    faceColor: actuatorData.faceColor, 
+    faceDirection: actuatorData.faceDirection
+  }));
   if (actuatorData.alarm) {
     actuators.setAlarm(actuatorData.alarm);
   } else {
