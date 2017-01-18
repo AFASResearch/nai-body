@@ -48,7 +48,7 @@ export let firebase = {
     if (!serviceAccount) {
       try {
         // Not in source control
-        serviceAccount = require('./nai-body-key.json');
+        serviceAccount = require('../nai-body-key.json');
       } catch (e) {
         console.error('Firebase credentials are not configured, please provide firebase service account private key ' +
           'in environment variable NAI_BODY_KEY or file ./nai-body-key.json');
