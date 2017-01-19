@@ -1,7 +1,12 @@
-import { actuators } from './actuators';
+let actuators: any;
+try {
+  actuators = require('./actuators');
+} catch(e) {
+  console.error('Actuators could not be loaded');
+}
 import { sensors } from './sensors';
 
-import {rtm} from './slack';
+import { rtm } from './slack';
 import { firebase } from './firebase';
 
 firebase.initialize();

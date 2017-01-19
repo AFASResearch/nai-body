@@ -21,4 +21,5 @@ if (process.env.SLACK_BOT_TOKEN) {
   rtm.start();
 } else {
   console.warn('Not connecting to slack because SLACK_BOT_TOKEN environment variable is missing');
+  rtm = {};
 }
