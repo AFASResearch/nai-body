@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AFASResearch/nai-body#readme",
   "dependencies": {
+    "@slack/client": "3.8.1",
     "@types/node": "7.0.0",
     "@types/onoff": "0.0.27",
     "firebase": "^3.6.5",

@@ -3,11 +3,11 @@ import * as raspi from 'raspi';
 import { PWM } from 'raspi-pwm';
 
 let leftEar = new Gpio(17 /*0*/, 'out');
-let rightEar = new Gpio(27 /*1*/, 'out');
+let rightEar = new Gpio(27 /*2*/, 'out');
 
 let neckServo: PWM;
 raspi.init(() => {
-  neckServo = new PWM({pin: 12 /* GPIO18 */, });
+  neckServo = new PWM({pin: 12 /*1*/ /* GPIO18 */});
   neckServo.write(72);
 });
 

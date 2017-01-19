@@ -1,6 +1,7 @@
 import { actuators } from './actuators';
 import { sensors } from './sensors';
 
+import {rtm} from './slack';
 import { firebase } from './firebase';
 
 firebase.initialize();
@@ -18,3 +19,5 @@ firebase.onActuatorsUpdate((actuatorData) => {
     actuators.turnFace(actuatorData.faceDirection);
   }
 });
+
+rtm.toString();
