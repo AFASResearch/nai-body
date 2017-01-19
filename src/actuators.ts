@@ -66,3 +66,5 @@ export let actuators = {
   }
 
 };
+
+export type Actuators = typeof actuators;

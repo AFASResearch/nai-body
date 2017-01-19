@@ -32,5 +32,10 @@
     "mcp-spi-adc": "0.3.1",
     "onoff": "1.1.1",
     "raspi-pwm": "3.1.2"
+  },
+  "devDependencies": {
+    "@types/chai": "3.4.34",
+    "chai": "3.5.0",
+    "mocha": "3.2.0"
   }
 }

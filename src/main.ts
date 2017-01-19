@@ -1,9 +1,21 @@
-let actuators: any;
+import {Actuators} from "./actuators";
+
+let noop = (): void => undefined;
+
+let actuators: Actuators;
+
 try {
   actuators = require('./actuators');
 } catch(e) {
-  console.error('Actuators could not be loaded');
+  console.error('Actuators could not be loaded:' + e);
+  actuators = {
+    turnFace: noop,
+    setAlarm: noop,
+    setFaceColor: noop,
+    clearAlarm: noop
+  }
 }
+
 import { sensors } from './sensors';
 
 import { rtm } from './slack';
