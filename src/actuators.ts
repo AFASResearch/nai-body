@@ -1,20 +1,21 @@
-import { Gpio } from 'onoff';
-import * as raspi from 'raspi';
-import { PWM } from 'raspi-pwm';
+let Gpio: any = require('pigpio').Gpio;
 
-let leftEar = new Gpio(17 /*0*/, 'out');
-let rightEar = new Gpio(27 /*2*/, 'out');
+interface GpioPin {
+  digitalWrite(level: 0|1): void;
+  /**
+   * @param pulseWidth Starts servo pulses at 50Hz on the GPIO, 0 (off), 500 (most anti-clockwise) to 2500 (most clockwise)
+   */
+  servoWrite(pulseWidth: number): void;
+}
 
-let neckServo: PWM;
-raspi.init(() => {
-  neckServo = new PWM({pin: 12 /*1*/ /* GPIO18 */});
-  neckServo.write(72);
-});
+let leftEar: GpioPin = new Gpio(17, {mode: Gpio.OUTPUT});
+let rightEar: GpioPin = new Gpio(27, {mode: Gpio.OUTPUT});
 
+let neckServo: GpioPin = new Gpio(18, {mode: Gpio.OUTPUT});
 
-let redFace = new Gpio(22 /*3*/, 'out');
-let greenFace = new Gpio(23 /*4*/, 'out');
-let blueFace = new Gpio(24 /*5*/, 'out');
+let redFace: GpioPin = new Gpio(22, {mode: Gpio.OUTPUT});
+let greenFace: GpioPin = new Gpio(23, {mode: Gpio.OUTPUT});
+let blueFace: GpioPin = new Gpio(24, {mode: Gpio.OUTPUT});
 
 let alarmInterval: number | undefined;
 let currentEar = leftEar;
@@ -26,15 +27,15 @@ let logErr = (err?: Object) => {
 };
 
 let rest = function() {
-  leftEar.write(0, logErr);
-  rightEar.write(0, logErr);
+  leftEar.digitalWrite(0);
+  rightEar.digitalWrite(0);
   currentEar = leftEar;
 };
 
 let step = function() {
-  currentEar.write(0, logErr);
+  currentEar.digitalWrite(0);
   currentEar = currentEar === leftEar ? rightEar : leftEar;
-  currentEar.write(1, logErr);
+  currentEar.digitalWrite(1);
 };
 
 rest();
@@ -53,16 +54,17 @@ export let actuators = {
       clearInterval(alarmInterval);
       alarmInterval = undefined;
     }
+    rest();
   },
 
   setFaceColor: (red: boolean, green: boolean, blue: boolean) => {
-    redFace.write(red ? 1 : 0, logErr);
-    greenFace.write(green ? 1 : 0, logErr);
-    blueFace.write(blue ? 1 :0, logErr);
+    redFace.digitalWrite(red ? 1 : 0);
+    greenFace.digitalWrite(green ? 1 : 0);
+    blueFace.digitalWrite(blue ? 1 :0);
   },
 
   turnFace: (direction: number /* 0 - 180 */) => {
-    neckServo.write(direction);
+    neckServo.servoWrite(1000 + (1000 * direction / 180));
   }
 
 };
