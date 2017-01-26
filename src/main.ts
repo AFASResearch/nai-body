@@ -5,7 +5,7 @@ let noop = (): void => undefined;
 let actuators: Actuators;
 
 try {
-  actuators = require('./actuators');
+  actuators = require('./actuators').actuators;
 } catch(e) {
   console.error('Actuators could not be loaded:' + e);
   actuators = {
