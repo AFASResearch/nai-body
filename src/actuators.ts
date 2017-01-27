@@ -64,7 +64,7 @@ export let actuators = {
   },
 
   turnFace: (direction: number /* 0 - 180 */) => {
-    neckServo.servoWrite(1000 + (1000 * direction / 180));
+    neckServo.servoWrite(1000 + Math.round((1000 * direction / 180)));
   }
 
 };
