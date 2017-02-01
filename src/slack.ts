@@ -15,7 +15,7 @@ if (process.env.SLACK_BOT_TOKEN) {
 
   // you need to wait for the client to fully connect before you can send messages
   rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function () {
-    rtm.sendMessage("Hello from nao-body!", 'G0R4BNJTB');
+    //rtm.sendMessage("Hello from nao-body!", 'G0R4BNJTB');
   });
 
   rtm.start();

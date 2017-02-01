@@ -90,6 +90,37 @@ export let firebase = {
     });
   },
 
+  getDOTWData: () => {
+    return fbapp.database().ref('nai/dotw/').once('value').then((snapshot) => {
+      let data = snapshot.val();
+      let cycle = {
+        current: data.cycle.current,
+        next: data.cycle.next ? data.cycle.next.split(',') : [],
+        past: data.cycle.past ? data.cycle.past.split(',') : []
+      };
+      return {
+        devs: data.devs,
+        cycle,
+        cron: data.cron
+      };
+    });
+  },
+
+  updateDOTWCycle: (cycle: any): void => {
+    let data = {
+      current: cycle.current,
+      next: cycle.next.join(','),
+      past: cycle.past.join(',')
+    };
+    fbapp.database().ref('nai/dotw/cycle').set(data);
+  },
+
+  getDOTWcycle: (cycle: any) => {
+    return fbapp.database().ref('nai/dotw/cycle').once('value').then((snapshot) => {
+      return snapshot.val();
+    });
+  },
+
   publishSensors: (sensors: SensorData): void => {
     if (sensorsChanged(sensors)) {
       fbapp.database().ref('nai/sensors').set(sensors);
