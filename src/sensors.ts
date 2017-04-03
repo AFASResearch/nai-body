@@ -22,8 +22,8 @@ export let sensors = {
             if (err) {
               console.log('Error reading temperature', err);
             }
-            let newTemperature = (reading.value * 3.3 - 0.5) * 10;
-            newTemperature = Math.round(newTemperature) * 10;
+            let newTemperature = (reading.value * 3.3 - 0.5) * 100;
+            newTemperature = Math.round(newTemperature * 10) / 10;
             if (newTemperature !== lastTemperature) {
               lastTemperature = newTemperature;
               console.log('New temperature', newTemperature);

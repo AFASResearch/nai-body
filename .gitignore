@@ -39,3 +39,5 @@ jspm_packages
 .idea
 nai-body-key.json
 build
+
+start.sh
