@@ -49,4 +49,8 @@ firebase.onActuatorsUpdate((actuatorData) => {
   }
 });
 
+sensors.onTemperatureChange((temperature: number) => {
+  firebase.publishSensors({temperature: temperature})
+});
+
 rtm.toString();
