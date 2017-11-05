@@ -1,9 +1,6 @@
 import * as admin from 'firebase-admin';
 import {app, database} from 'firebase';
-
-let onerror = (error: any) => {
-  console.error(error);
-};
+import {handleError} from '../utilities';
 
 let fbapp: app.App;
 
@@ -14,11 +11,7 @@ export interface ActuatorData {
    */
   alarm?: number;
 
-  faceColor?: {
-    red?: boolean;
-    green?: boolean;
-    blue?: boolean;
-  },
+  faceEmotion: string, // smile, sad, asleep, ...
 
   faceDirection?: number;
 }
@@ -48,10 +41,10 @@ export let firebase = {
     if (!serviceAccount) {
       try {
         // Not in source control
-        serviceAccount = require('../nai-body-key.json');
+        serviceAccount = require('../../local-config.json').firebase;
       } catch (e) {
         console.error('Firebase credentials are not configured, please provide firebase service account private key ' +
-          'in environment variable NAI_BODY_KEY or file ./nai-body-key.json');
+          'in environment variable NAI_BODY_KEY or file ./local-cnfig.json under key "firebase"');
         process.exit(1);
       }
     }
@@ -81,7 +74,7 @@ export let firebase = {
         })
       }).then(() => {
       console.log('connection registered');
-    }).catch(onerror);
+    }).catch(handleError);
   },
 
   onActuatorsUpdate: (callback: (actuators: ActuatorData) => void) => {

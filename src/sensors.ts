@@ -1,3 +1,5 @@
+// Not used anymore, the temperature sensor is now on the microbit-face
+
 let mcpadc: any;
 
 try {

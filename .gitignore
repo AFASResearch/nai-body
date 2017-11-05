@@ -39,6 +39,7 @@ pxt_modules
 
 .idea
 nai-body-key.json
+local-config.json
 build
 
 start.sh

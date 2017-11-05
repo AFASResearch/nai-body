@@ -1,26 +1,36 @@
-import {Actuators} from "./actuators";
+import {rtm} from './slack';
+import {firebase} from './services/firebase';
+import {dotw} from './dotw';
+import {createGpioService, GpioService} from './services/gpio';
+import {createMicroBitService, MicroBitService} from './services/microBit';
+import {createFake} from './utilities';
+import {Actuators, createActuators} from './actuators';
 
-let noop = (): void => undefined;
-let actuators: Actuators;
+let config: any = require('../local-config.json');
+
+let gpioService: GpioService;
+let microBitService: MicroBitService;
 
 try {
-  actuators = require('./actuators').actuators;
-} catch(e) {
-  console.error('Actuators could not be loaded:' + e);
-  actuators = {
-    turnFace: noop,
-    setAlarm: noop,
-    setFaceColor: noop,
-    clearAlarm: noop
+  gpioService = createGpioService();
+} catch (e) {
+  console.error('GpioService could not be loaded:' + e);
+  gpioService = {
+    lightEar: createFake('lightEar')
   }
 }
 
-import { sensors } from './sensors';
+try {
+  microBitService = createMicroBitService(config.microBitSerialPort);
+} catch (e) {
+  console.error('MicroBitService could not be loaded' + e);
+  microBitService = {
+    onValueReceived: () => undefined,
+    sendCommand: createFake('sendCommand')
+  };
+}
 
-import { rtm } from './slack';
-import { firebase } from './firebase';
-
-import { dotw } from './dotw';
+let actuators: Actuators = createActuators({gpio: gpioService, microBit: microBitService});
 
 let devOfTheWeek = dotw(firebase.updateDOTWCycle);
 
@@ -32,8 +42,8 @@ firebase.getDOTWData().then(result => {
 
 firebase.onActuatorsUpdate((actuatorData) => {
   console.log('updating actuators', JSON.stringify({
-    alarm: actuatorData.alarm, 
-    faceColor: actuatorData.faceColor, 
+    alarm: actuatorData.alarm,
+    faceEmotion: actuatorData.faceEmotion,
     faceDirection: actuatorData.faceDirection
   }));
   if (actuatorData.alarm) {
@@ -41,16 +51,30 @@ firebase.onActuatorsUpdate((actuatorData) => {
   } else {
     actuators.clearAlarm();
   }
-  if (actuatorData.faceColor) {
-    actuators.setFaceColor(actuatorData.faceColor.red || false, actuatorData.faceColor.green || false, actuatorData.faceColor.blue || false);
+  if (actuatorData.faceEmotion) {
+    actuators.setFaceEmotion(actuatorData.faceEmotion);
   }
   if (actuatorData.faceDirection) {
-    actuators.turnFace(actuatorData.faceDirection);
+    // actuators.turnFace(actuatorData.faceDirection);
   }
 });
 
-sensors.onTemperatureChange((temperature: number) => {
-  firebase.publishSensors({temperature: temperature})
+let lastReportedTemperature = 0;
+let lastReportedTimestamp = 0;
+
+microBitService.onValueReceived('temperature', (value: number) => {
+  let temperature = value / 10;
+  let timestamp = new Date().getTime();
+  let delta = timestamp - lastReportedTimestamp;
+  if (Math.abs(lastReportedTemperature - temperature) * (delta / (1000 * 60)) > 1) { // 1 degree 1 minute
+    firebase.publishSensors({ temperature });
+    lastReportedTemperature = temperature;
+    lastReportedTimestamp = timestamp;
+  }
 });
+
+// sensors.onTemperatureChange((temperature: number) => {
+//   firebase.publishSensors({temperature: temperature});
+// });
 
 rtm.toString();
