@@ -1,12 +1,16 @@
+import {MessageLogic} from './logic/message-logic';
+
 export let rtm: any;
 
-if (process.env.SLACK_BOT_TOKEN) {
-  var RtmClient = require('@slack/client').RtmClient;
-  var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
+export interface SlackService {
+  sendMessage(message: string): void;
+}
 
-  var bot_token = process.env.SLACK_BOT_TOKEN || '';
+export let createSlackService = (token: string, messageLogic: MessageLogic) => {
+  let RtmClient = require('@slack/client').RtmClient;
+  let CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 
-  rtm = new RtmClient(bot_token);
+  rtm = new RtmClient(token);
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload if you want to cache it
   rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData: any) {
@@ -15,11 +19,24 @@ if (process.env.SLACK_BOT_TOKEN) {
 
   // you need to wait for the client to fully connect before you can send messages
   rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function () {
-    //rtm.sendMessage("Hello from nao-body!", 'G0R4BNJTB');
+    console.log('connection opened');
+  });
+
+  rtm.on('message', (messageData: any) => {
+    console.log('Processing message ' + messageData.text);
+    // console.log(JSON.stringify(messageData));
+    messageLogic.process(messageData.text, {toMe: messageData.channel.substr(0, 1) === 'D'}).then(reply => {
+      if (reply) {
+        rtm.sendMessage(reply, messageData.channel);
+      }
+    });
   });
 
   rtm.start();
-} else {
-  console.warn('Not connecting to slack because SLACK_BOT_TOKEN environment variable is missing');
-  rtm = {};
-}
+
+  return {
+    sendMessage: (message: string) => {
+      rtm.sendMessage(message, 'G0R4BNJTB' /* Frontend-core */);
+    }
+  };
+};

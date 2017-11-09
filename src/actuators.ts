@@ -1,7 +1,7 @@
 import {GpioService} from './services/gpio';
 import {MicroBitService} from './services/microBit';
 
-let alarmInterval: number | undefined;
+let alarmInterval: any | undefined;
 let currentEar: 1 | 2 = 1;
 
 export interface Actuators {

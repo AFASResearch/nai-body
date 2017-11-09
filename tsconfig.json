@@ -2,6 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
+    "lib": [
+      "es2015", "es2015.promise"
+    ],
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "build/js"

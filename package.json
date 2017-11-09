@@ -17,24 +17,25 @@
   },
   "homepage": "https://github.com/AFASResearch/nai-body#readme",
   "dependencies": {
-    "@slack/client": "3.8.1",
-    "@types/node": "7.0.0",
-    "firebase": "^3.6.5",
-    "firebase-admin": "^4.0.4",
-    "node-cron": "1.1.2",
-    "node-fetch": "1.6.3",
-    "ts-node": "2.0.0",
+    "@slack/client": "3.14.1",
+    "@types/node": "8.0.50",
+    "firebase": "4.6.1",
+    "firebase-admin": "5.4.3",
+    "node-cron": "1.2.1",
+    "node-fetch": "1.7.3",
+    "serialport": "6.0.4",
+    "ts-node": "3.3.0",
     "typescript": "^2.1.5"
   },
   "optionalDependencies": {
-    "mcp-spi-adc": "0.3.1",
-    "pigpio": "0.4.0"
+    "mcp-spi-adc": "1.0.0",
+    "pigpio": "0.6.3"
   },
   "devDependencies": {
-    "@types/chai": "3.4.34",
+    "@types/chai": "4.0.4",
+    "@types/mocha": "2.2.44",
     "@types/serialport": "6.0.0",
-    "chai": "3.5.0",
-    "mocha": "3.2.0",
-    "serialport": "6.0.4"
+    "chai": "4.1.2",
+    "mocha": "4.0.1"
   }
 }

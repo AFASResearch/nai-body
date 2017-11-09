@@ -1,4 +1,3 @@
-import FirebaseError = firebase.FirebaseError;
 /**
  * Dev of the week
  */
@@ -17,14 +16,12 @@ interface Cycle {
   next: string[];
 }
 
-export let dotw = (updateData:(cycle:Cycle) => void) => {
+export let dotw = (slackBotToken: string, updateData:(cycle:Cycle) => void) => {
   let cycle:Cycle;
   let developers: any;
   let WebClient = require('@slack/client').WebClient;
 
-  let token = process.env.SLACK_BOT_TOKEN || ''; //see section above on sensitive data
-
-  let web = new WebClient(token);
+  let web = new WebClient(slackBotToken);
 
   let chooseNewDevOfTheWeek = function () {
     if (!cycle.next.length) {
