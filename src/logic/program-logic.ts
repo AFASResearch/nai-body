@@ -1,5 +1,21 @@
 import {networkInterfaces} from 'os';
 import {spawn} from 'child_process';
+import * as path from 'path';
+import * as fs from 'fs';
+
+let updateFileContents = `
+console.log('Updating to latest version, please wait...');
+const child_process = require('child_process');
+try {
+  child_process.execSync('git pull', { cwd: process.cwd(), encoding: 'UTF-8', stdio: [0, 1, 2] });
+  child_process.execSync('node index.js', { cwd: process.cwd(), encoding: 'UTF-8', stdio: [0, 1, 2] });
+} catch (e) {
+  console.error('update failed', e);
+  console.log('Press enter to continue');
+  process.stdin.once('data', function(){
+    process.exit(1);
+  });
+}`;
 
 export let programLogic = {
   getIp: () => {
@@ -24,7 +40,8 @@ export let programLogic = {
     install.unref();
   },
   update: () => {
-    let install = spawn('git', ['pull'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
+    fs.writeFileSync(path.join(process.cwd(), 'build', 'update.js'), updateFileContents);
+    let install = spawn('node', ['build/update.js'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
     install.unref();
     process.exit(0);
   },

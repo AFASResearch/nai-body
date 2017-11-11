@@ -1,9 +1,10 @@
-import {MessageLogic} from './logic/message-logic';
+import {MessageLogic} from '../logic/message-logic';
 
 export let rtm: any;
 
 export interface SlackService {
   sendMessage(message: string): void;
+  logDiagnostic(obj: any): void;
 }
 
 export let createSlackService = (token: string, messageLogic: MessageLogic) => {
@@ -37,6 +38,9 @@ export let createSlackService = (token: string, messageLogic: MessageLogic) => {
   return {
     sendMessage: (message: string) => {
       rtm.sendMessage(message, 'G0R4BNJTB' /* Frontend-core */);
+    },
+    logDiagnostic: (msg: any) => {
+      rtm.sendMessage(JSON.stringify(msg, undefined, 2), 'C3T18HUF3' /* nai-diagnostics */);
     }
   };
 };

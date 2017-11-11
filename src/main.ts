@@ -1,4 +1,4 @@
-import {createSlackService, SlackService} from './slack';
+import {createSlackService, SlackService} from './services/slack';
 import {createFirebaseService, FirebaseService} from './services/firebase';
 import {dotw} from './dotw';
 import {createGpioService, GpioService} from './services/gpio';
@@ -48,7 +48,8 @@ if (config.slackBotToken) {
   slackService = createSlackService(config.slackBotToken, messageLogic);
 } else {
   slackService = {
-    sendMessage: createFake('slackService.sendMessage')
+    sendMessage: createFake('slackService.sendMessage'),
+    logDiagnostic: createFake('slackService.logDiagnostic')
   }
 }
 
