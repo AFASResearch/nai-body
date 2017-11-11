@@ -1,16 +1,18 @@
 import {ProgramLogic, programLogic} from './program-logic';
 
 export interface MessageLogic {
-  process(message: string, options: { toMe?: boolean }): Promise<string | undefined>;
+  process(message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined>;
+  registerDiagnosticLogger(logger: (msg: any) => void): void;
 }
 
 export let createMessageLogic = (config: { getTemperature: () => number | undefined, aboutLogic: ProgramLogic }): MessageLogic => {
   let {getTemperature, aboutLogic} = config;
+  let diagnosticLogger = (msg: any) => undefined as void;
 
   let temperatureSynonyms = ['temperature', 'temp', 'warm', 'cold', 'hot', 'temperatuur', 'koud', 'heet', 'warm'];
   let temperatureQuestionWords = ['is', 'hoe', 'hoog'];
 
-  let process = async (message: string, options: { toMe?: true }): Promise<string | undefined> => {
+  let process = async (message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined> => {
     let { toMe } = options;
     let words = message.toLocaleLowerCase().split(/\W+/g);
     let findWord = (word: string) => words.indexOf(word) !== -1;
@@ -49,6 +51,12 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
   };
 
   return {
-    process
+    process: (msg, options) => {
+      return process(msg, options).then(reply => {
+        diagnosticLogger({ msg, options, reply });
+        return reply;
+      })
+    },
+    registerDiagnosticLogger: (logger) => { diagnosticLogger = logger; }
   };
 };

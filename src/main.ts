@@ -45,7 +45,8 @@ try {
 }
 
 if (config.slackBotToken) {
-  slackService = createSlackService(config.slackBotToken, messageLogic);
+  slackService = createSlackService(config.slackBotToken, messageLogic, programLogic);
+  messageLogic.registerDiagnosticLogger(slackService.logDiagnostic);
 } else {
   slackService = {
     sendMessage: createFake('slackService.sendMessage'),
