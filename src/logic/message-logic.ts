@@ -15,6 +15,10 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
   let process = async (message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined> => {
     let { toMe } = options;
     let words = message.toLocaleLowerCase().split(/\W+/g);
+    if (!toMe && words.indexOf('nai') !== -1) {
+      toMe = true;
+      words = words.filter(word => word !== 'nai');
+    }
     let findWord = (word: string) => words.indexOf(word) !== -1;
     let findWords = (needles: string[]) => needles.some(findWord);
     let isQuestion = message.endsWith('?');
