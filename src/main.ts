@@ -7,6 +7,7 @@ import {createFake} from './utilities';
 import {Actuators, createActuators} from './actuators';
 import {createMessageLogic} from './logic/message-logic';
 import {programLogic} from './logic/program-logic';
+import { createBuildStatusProcessor } from './build-status/build-status-processor';
 
 let config: any = require('../local-config.json');
 
@@ -54,22 +55,24 @@ if (config.slackBotToken) {
   }
 }
 
-if (config.firebase && config.slackBotToken) {
+if (config.firebase) {
   firebaseService = createFirebaseService(config.firebase, programLogic);
 
-  let devOfTheWeek = dotw(config.slackBotToken, firebaseService.updateDOTWCycle);
+  if (config.slackBotToken) {
+    let devOfTheWeek = dotw(config.slackBotToken, firebaseService.updateDOTWCycle);
 
-  firebaseService.getDOTWData().then((result: any) => {
-    devOfTheWeek.initialize(result.devs, result.cycle, result.cron);
-  });
-
+    firebaseService.getDOTWData().then((result: any) => {
+      devOfTheWeek.initialize(result.devs, result.cycle, result.cron);
+    });
+  }
 } else {
   firebaseService = {
     getDOTWData: () => undefined,
     onActuatorsUpdate: () => undefined,
     publishSensors: createFake('firebaseService.publishSensors'),
     updateDOTWCycle: () => undefined,
-    getDOTWcycle: () => undefined
+    getDOTWcycle: () => undefined,
+    getBuildStatus: () => ({child: () => ({ on: () => false } as any)}) as any
   }
 }
 
@@ -107,3 +110,5 @@ microBitService.onValueReceived('temperature', (value: number) => {
     lastReportedTimestamp = timestamp;
   }
 });
+
+// createBuildStatusProcessor({firebase: firebaseService});

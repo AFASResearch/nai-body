@@ -1,6 +1,5 @@
 import {app, database} from 'firebase';
 import {handleError} from '../utilities';
-import {networkInterfaces} from 'os';
 import {ProgramLogic} from '../logic/program-logic';
 
 const admin: any = require('firebase-admin');
@@ -11,6 +10,7 @@ export interface FirebaseService {
   updateDOTWCycle(cycle: any): void;
   getDOTWcycle(): any;
   publishSensors(sensors: SensorData): void;
+  getBuildStatus(): database.Reference
 }
 
 export interface ActuatorData {
@@ -113,6 +113,10 @@ export let createFirebaseService = (serviceAccount: any, aboutLogic: ProgramLogi
       if (sensorsChanged(sensors)) {
         fbapp.database().ref('nai/sensors').set(sensors);
       }
+    },
+
+    getBuildStatus: () => {
+      return fbapp.database().ref('buildStatus');
     }
   };
 };
