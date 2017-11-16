@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>NAI</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        * {box-sizing: border-box; }
+        head, body { padding: 0; margin: 0; }
+        body { display: flex; flex-direction: column; min-height: 100vh; justify-content: flex-start; font-family: Verdana, Geneva, sans-serif; }
+    </style>
+</head>
+<body>
+
+<div>
+    <input id="input" type="text" />
+    <pre id="output"></pre>
+</div>
+
+<script>
+
+  var webSocket = new WebSocket('ws://' + window.location.host + '/ws');
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('input').addEventListener('keydown', function(evt) {
+      if(evt.which === 13) {
+        webSocket.send(evt.currentTarget.value);
+        evt.currentTarget.value = '';
+        document.getElementById('output').innerText = '';
+      }
+    });
+  });
+
+  webSocket.onmessage = function(evt) {
+    document.getElementById('output').innerText = evt.data;
+  };
+
+  webSocket.onclose = function() {
+    document.body.innerText = 'NOT CONNECTED';
+  }
+
+</script>
+</body>
+</html>

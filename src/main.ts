@@ -8,6 +8,7 @@ import {Actuators, createActuators} from './actuators';
 import {createMessageLogic} from './logic/message-logic';
 import {programLogic} from './logic/program-logic';
 import { createBuildStatusProcessor } from './build-status/build-status-processor';
+import { startWebserver } from './webserver';
 
 let config: any = require('../local-config.json');
 
@@ -110,5 +111,9 @@ microBitService.onValueReceived('temperature', (value: number) => {
     lastReportedTimestamp = timestamp;
   }
 });
+
+if (config.webserver) {
+  startWebserver(config.webserver, {messageLogic});
+}
 
 // createBuildStatusProcessor({firebase: firebaseService});

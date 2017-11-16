@@ -40,6 +40,9 @@ export let programLogic = {
     install.unref();
   },
   update: () => {
+    if (!fs.existsSync(path.join(process.cwd(), 'build'))) {
+      fs.mkdirSync(path.join(process.cwd(), 'build'));
+    }
     fs.writeFileSync(path.join(process.cwd(), 'build', 'update.js'), updateFileContents);
     let install = spawn('node', ['build/update.js'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
     install.unref();
