@@ -116,4 +116,4 @@ if (config.webserver) {
   startWebserver(config.webserver, {messageLogic});
 }
 
-// createBuildStatusProcessor({firebase: firebaseService});
+createBuildStatusProcessor({firebase: firebaseService});
