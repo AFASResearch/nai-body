@@ -11,8 +11,15 @@
 <body>
 
 <div>
+    <h2>Send message</h2>
     <input id="input" type="text" />
     <pre id="output"></pre>
+
+    <h2>Emotion</h2>
+    <form action="/emotion" method="post">
+        <input name="emotion" type="text" />
+        <input type="submit" name="ok" value="ok" />
+    </form>
 </div>
 
 <script>
