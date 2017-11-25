@@ -8,7 +8,7 @@ console.log('Updating to latest version, please wait...');
 const child_process = require('child_process');
 try {
   child_process.execSync('git pull', { cwd: process.cwd(), encoding: 'UTF-8', stdio: [0, 1, 2] });
-  child_process.execSync('node index.js', { cwd: process.cwd(), encoding: 'UTF-8', stdio: [0, 1, 2] });
+  child_process.execSync('${process.argv[0]} index.js', { cwd: process.cwd(), encoding: 'UTF-8', stdio: [0, 1, 2] });
 } catch (e) {
   console.error('update failed', e);
   console.log('Press enter to continue');

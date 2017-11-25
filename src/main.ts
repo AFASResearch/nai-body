@@ -113,7 +113,7 @@ microBitService.onValueReceived('temperature', (value: number) => {
 });
 
 if (config.webserver) {
-  startWebserver(config.webserver, {messageLogic});
+  startWebserver(config.webserver, {messageLogic, microBit: microBitService});
 }
 
 // createBuildStatusProcessor({firebase: firebaseService});
