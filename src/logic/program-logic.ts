@@ -52,7 +52,7 @@ export let programLogic = {
     }
     fs.writeFileSync(path.join(process.cwd(), 'build', 'update.js'), updateFileContents);
     let doIt = () => {
-      let install = spawn('node', ['build/update.js'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
+      let install = spawn(process.argv[0], ['build/update.js'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
       install.unref();
       process.exit(0);
     };
