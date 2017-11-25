@@ -44,6 +44,9 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
         case 'reboot':
           programLogic.reboot();
           return 'Back in a sec';
+        case 'terminate':
+          programLogic.terminate();
+          return 'Bye';
         case 'update':
           setTimeout(programLogic.update, 100);
           return 'More AI is on its way';

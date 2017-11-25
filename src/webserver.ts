@@ -43,4 +43,10 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
   });
 
   console.log('Webserver listening on http://localhost:' + config.port);
+
+  return {
+    stop: (cb: () => void) => {
+      server.close(cb)
+    }
+  }
 };
