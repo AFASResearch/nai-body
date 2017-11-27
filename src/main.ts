@@ -24,12 +24,14 @@ let messageLogic = createMessageLogic({
   aboutLogic: programLogic
 });
 
-try {
-  gpioService = createGpioService();
-} catch (e) {
-  console.error('GpioService could not be loaded:' + e);
-  gpioService = {
-    lightEar: createFake('gpioService.lightEar')
+gpioService = {
+  lightEar: createFake('gpioService.lightEar')
+};
+if (config.gpio) {
+  try {
+    gpioService = createGpioService();
+  } catch (e) {
+    console.error('GpioService could not be loaded:' + e);
   }
 }
 
