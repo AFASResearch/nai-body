@@ -5,6 +5,11 @@ import * as fs from 'fs';
 import {MicroBitService} from './services/microBit';
 var querystring = require('querystring');
 
+interface ExternalEvent {
+  type: 'waiting' | 'listening' | 'audioSent' | 'textRecognized' | 'speaking';
+  text?: string; /* only if type === textRecognized */
+}
+
 interface WebserverConfig {
   port: number;
 }
@@ -34,12 +39,33 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
   server.listen(config.port);
 
   wss.on('connection', (ws: any) => {
+    dependencies.microBit.sendCommand('asleep');
     ws.on('message', (message: string) => {
       console.log(`Server received: ${message}`);
-      dependencies.messageLogic.process(message, {toMe: true, source: 'webserver'}).then((reply) => {
-        ws.send(reply);
-      });
+      try {
+        let event: ExternalEvent = JSON.parse(message);
+        if (event.type === 'textRecognized' && event.text) {
+          dependencies.messageLogic.process(event.text, {toMe: true, source: 'webserver'}).then((reply) => {
+            if (reply) {
+              ws.send(reply);
+            }
+          });
+        } else if (event.type === 'waiting') {
+          dependencies.microBit.sendCommand('asleep');
+        } else if (event.type === 'listening') {
+          dependencies.microBit.sendCommand('smile');
+        } else if (event.type === 'audioSent') {
+          dependencies.microBit.sendCommand('think');
+        } else if (event.type === 'speaking') {
+          dependencies.microBit.sendCommand('speak');
+        }
+      } catch (e) {
+        console.log('Could not process message received from webserver: ' + e);
+      }
     });
+    ws.on('close', () => {
+      dependencies.microBit.sendCommand('away');
+    })
   });
 
   console.log('Webserver listening on http://localhost:' + config.port);

@@ -12,8 +12,8 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
   let temperatureSynonyms = ['temperature', 'temp', 'warm', 'cold', 'hot', 'temperatuur', 'koud', 'heet', 'warm'];
   let temperatureQuestionWords = ['is', 'hoe', 'hoog'];
 
-  let process = async (message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined> => {
-    let { toMe } = options;
+  let process = async (message: string, options: { toMe?: boolean, source: string }): Promise<string | undefined> => {
+    let { toMe, source } = options;
     let words = message.toLocaleLowerCase().split(/\W+/g);
     if (!toMe && words.indexOf('nai') !== -1) {
       toMe = true;
@@ -50,6 +50,9 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
         case 'update':
           setTimeout(programLogic.update, 100);
           return 'More AI is on its way';
+      }
+      if (source === 'webserver') {
+        return undefined; // Lets the reply come from Google Assistant, because we do not understand it here
       }
       return 'Sorry, I don\'t understand, I am just a robot.'
     }
