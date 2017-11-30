@@ -44,7 +44,8 @@ try {
   console.error('MicroBitService could not be loaded' + e);
   microBitService = {
     onValueReceived: () => undefined,
-    sendCommand: createFake('microBitService.sendCommand')
+    sendCommand: createFake('microBitService.sendCommand'),
+    quit: createFake('microBitService.quit')
   };
 }
 
