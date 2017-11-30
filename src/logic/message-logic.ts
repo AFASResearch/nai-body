@@ -38,6 +38,7 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
         return `I am at ${aboutLogic.getIp()}`
       }
       switch (message.toLowerCase()) {
+        case 'shut down':
         case 'shutdown':
           programLogic.shutdown();
           return 'Goodbye cruel world';

@@ -39,13 +39,28 @@ serial.onDataReceived(serial.delimiters(Delimiters.Comma), () => {
             # . . . #
             . # # # .
             `, 0)
+  } else if (command == "exit") {
+    basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . # . .
+            . . . . .
+            . . . . .
+            `, 0)
   } else {
     basic.showString(command);
   }
 });
 
 led.setBrightness(100);
-basic.showIcon(IconNames.No);
+basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . # . .
+            . . . . .
+            . . . . .
+            `, 0)
+
 while (true) {
   voltage = pins.map(
     pins.analogReadPin(AnalogPin.P2),

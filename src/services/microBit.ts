@@ -3,13 +3,14 @@ import {handleError} from '../utilities';
 export interface MicroBitService {
   sendCommand(command: string): void;
   onValueReceived(name: string, callback: (value: number) => void): void;
+  quit(): void;
 }
 
 /**
  * We send to the micro bit over serial port using usb. Sending as comma separated strings
  * receive as newline separated keyvalue pairs
  *
- * @param serialPort ex: /dev/cu.usbmodem1412
+ * @param serialPort ex: /dev/ttyACM0 or /dev/cu.usbmodem1422
  */
 export let createMicroBitService = (serialPort: string): MicroBitService => {
   let SerialPort = require('serialport');
@@ -54,6 +55,9 @@ export let createMicroBitService = (serialPort: string): MicroBitService => {
         valueReceivers = receivers[name] = [];
       }
       valueReceivers.push(callback);
+    },
+    quit: () => {
+      port.write('exit,', 'ascii', handleError);
     }
   }
 };

@@ -39,6 +39,7 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
   server.listen(config.port);
 
   wss.on('connection', (ws: any) => {
+    console.log('Websocket connected');
     dependencies.microBit.sendCommand('asleep');
     ws.on('message', (message: string) => {
       console.log(`Server received: ${message}`);
@@ -64,6 +65,7 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
       }
     });
     ws.on('close', () => {
+      console.log('Websocket disconnected');
       dependencies.microBit.sendCommand('away');
     })
   });

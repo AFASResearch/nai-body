@@ -34,17 +34,21 @@ export let programLogic = {
     return addresses.join(' ');
   },
   shutdown: () => {
-    let install = spawn('shutdown', ['-h', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
-    install.unref();
+    setTimeout(() => {
+      let install = spawn('shutdown', ['-h', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
+      install.unref();
+    }, 500);
   },
   reboot: () => {
-    let install = spawn('shutdown', ['-r', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
-    install.unref();
+    setTimeout(() => {
+      let install = spawn('shutdown', ['-r', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
+      install.unref();
+    }, 500);
   },
   terminate: () => {
     setTimeout(() => {
       process.exit(0);
-    }, 100);
+    }, 500);
   },
   update: () => {
     if (!fs.existsSync(path.join(process.cwd(), 'build'))) {
