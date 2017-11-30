@@ -3,11 +3,13 @@ import {ProgramLogic, programLogic} from './program-logic';
 export interface MessageLogic {
   process(message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined>;
   registerDiagnosticLogger(logger: (msg: any) => void): void;
+  registerBeforeExit(callback: () => void): void;
 }
 
 export let createMessageLogic = (config: { getTemperature: () => number | undefined, aboutLogic: ProgramLogic }): MessageLogic => {
   let {getTemperature, aboutLogic} = config;
   let diagnosticLogger = (msg: any) => undefined as void;
+  let beforeExit = () => undefined as void;
 
   let temperatureSynonyms = ['temperature', 'temp', 'warm', 'cold', 'hot', 'temperatuur', 'koud', 'heet', 'warm'];
   let temperatureQuestionWords = ['is', 'hoe', 'hoog'];
@@ -40,16 +42,20 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
       switch (message.toLowerCase()) {
         case 'shut down':
         case 'shutdown':
+          beforeExit();
           programLogic.shutdown();
           return 'Goodbye cruel world';
         case 'reboot':
+          beforeExit();
           programLogic.reboot();
           return 'Back in a sec';
         case 'terminate':
+          beforeExit();
           programLogic.terminate();
           return 'Bye';
         case 'updates':
         case 'update':
+          beforeExit();
           setTimeout(programLogic.update, 100);
           return 'More AI is on its way';
       }
@@ -69,6 +75,7 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
         return reply;
       })
     },
-    registerDiagnosticLogger: (logger) => { diagnosticLogger = logger; }
+    registerDiagnosticLogger: (logger) => { diagnosticLogger = logger; },
+    registerBeforeExit: (callback) => { beforeExit = callback; }
   };
 };

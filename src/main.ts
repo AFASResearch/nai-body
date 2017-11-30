@@ -1,7 +1,6 @@
 import {createSlackService, SlackService} from './services/slack';
 import {createFirebaseService, FirebaseService} from './services/firebase';
 import {dotw} from './dotw';
-import {createGpioService, GpioService} from './services/gpio';
 import {createMicroBitService, MicroBitService} from './services/microBit';
 import {createFake} from './utilities';
 import {Actuators, createActuators} from './actuators';
@@ -9,6 +8,7 @@ import {createMessageLogic} from './logic/message-logic';
 import {programLogic} from './logic/program-logic';
 import { createBuildStatusProcessor } from './build-status/build-status-processor';
 import { startWebserver } from './webserver';
+import {GpioService} from './services/gpio';
 
 let config: any = require('../local-config.json');
 
@@ -29,7 +29,7 @@ gpioService = {
 };
 if (config.gpio) {
   try {
-    gpioService = createGpioService();
+    gpioService = require('./services/gpio').createGpioService();
   } catch (e) {
     console.error('GpioService could not be loaded:' + e);
   }
@@ -40,6 +40,8 @@ try {
     throw new Error('localConfig did not contain microBitSerialPort');
   }
   microBitService = createMicroBitService(config.microBitSerialPort);
+  microBitService.sendCommand('away'); // webservice not yet connected
+  messageLogic.registerBeforeExit(microBitService.quit);
 } catch (e) {
   console.error('MicroBitService could not be loaded' + e);
   microBitService = {
@@ -85,16 +87,12 @@ let actuators: Actuators = createActuators({gpio: gpioService, microBit: microBi
 firebaseService.onActuatorsUpdate((actuatorData) => {
   console.log('updating actuators', JSON.stringify({
     alarm: actuatorData.alarm,
-    faceEmotion: actuatorData.faceEmotion,
     faceDirection: actuatorData.faceDirection
   }));
   if (actuatorData.alarm) {
     actuators.setAlarm(actuatorData.alarm);
   } else {
     actuators.clearAlarm();
-  }
-  if (actuatorData.faceEmotion) {
-    actuators.setFaceEmotion(actuatorData.faceEmotion);
   }
   if (actuatorData.faceDirection) {
     // actuators.turnFace(actuatorData.faceDirection);

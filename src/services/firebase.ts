@@ -20,8 +20,6 @@ export interface ActuatorData {
    */
   alarm?: number;
 
-  faceEmotion: string, // smile, sad, asleep, ...
-
   faceDirection?: number;
 }
 
