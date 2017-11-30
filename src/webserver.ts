@@ -74,7 +74,8 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
 
   return {
     stop: (cb: () => void) => {
-      server.close(cb)
+      server.close(cb);
+      setTimeout(cb, 500);
     }
   }
 };
