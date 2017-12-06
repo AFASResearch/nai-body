@@ -32,7 +32,7 @@ export let createUdpService = (config: UdpConfig): MessageProcessor => {
         });
         return result;
       });
-      commands.forEach(command => {
+      for (let command of commands) {
         if (command.words.every(commandWord => words.indexOf(commandWord) !== -1)) {
           let array = command.packetContents.split(',').map(doubleOctet => parseInt(doubleOctet, 16));
           let typedArray = new Uint8Array(array);
@@ -47,7 +47,7 @@ export let createUdpService = (config: UdpConfig): MessageProcessor => {
           });
           return 'Ok';
         }
-      });
+      };
       return undefined;
     }
   }
