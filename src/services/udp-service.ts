@@ -47,7 +47,7 @@ export let createUdpService = (config: UdpConfig): MessageProcessor => {
           });
           return 'Ok';
         }
-      };
+      }
       return undefined;
     }
   }

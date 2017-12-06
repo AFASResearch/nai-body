@@ -40,7 +40,7 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
         if (temp === undefined) {
           return 'I don\'t know';
         }
-        return `It is ${getTemperature().toFixed(1)} °C`;
+        return `According to my sensors, it is ${getTemperature().toFixed(1)} °C`;
       }
     }
 
@@ -48,20 +48,28 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
       if (findWords(['location', 'adres', 'address', 'ip']) || (isQuestion && findWords(['waar', 'where']))) {
         return `I am at ${aboutLogic.getIp()}`
       }
-      switch (message.toLowerCase()) {
-        case 'shut down':
-        case 'shutdown':
+      let match = /shut ?down\W?(\w*)$/.exec(message);
+      if (match) {
+        if (!match[1]) {
+          return 'You forgot the magic word';
+        }
+        if (match[1].toUpperCase().charCodeAt(0) === new Date().toString().charCodeAt(0)) {
           beforeExit();
           programLogic.shutdown();
           return 'Goodbye cruel world';
+        } else {
+          return 'Sorry, try again';
+        }
+      }
+      switch (message.toLowerCase()) {
         case 'reboot':
           beforeExit();
           programLogic.reboot();
           return 'Back in a sec';
-        case 'terminate':
-          beforeExit();
-          programLogic.terminate();
-          return 'Bye';
+        // case 'terminate':
+        //   beforeExit();
+        //   programLogic.terminate();
+        //   return 'Bye';
         case 'updates':
         case 'update':
           beforeExit();

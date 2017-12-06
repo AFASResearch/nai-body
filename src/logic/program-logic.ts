@@ -37,18 +37,18 @@ export let programLogic = {
     setTimeout(() => {
       let install = spawn('shutdown', ['-h', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
       install.unref();
-    }, 500);
+    }, 1500);
   },
   reboot: () => {
     setTimeout(() => {
       let install = spawn('shutdown', ['-r', 'now'], { stdio: 'ignore', shell: true, detached: true, cwd: process.cwd() });
       install.unref();
-    }, 500);
+    }, 1500);
   },
   terminate: () => {
     setTimeout(() => {
       process.exit(0);
-    }, 500);
+    }, 1500);
   },
   update: () => {
     if (!fs.existsSync(path.join(process.cwd(), 'build'))) {

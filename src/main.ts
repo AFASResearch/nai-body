@@ -111,7 +111,7 @@ let lastReportedTemperature = 0;
 let lastReportedTimestamp = 0;
 
 microBitService.onValueReceived('temperature', (value: number) => {
-  temperature = value / 10;
+  temperature = (value - 85 /* empirically determined value */) / 10;
   let timestamp = new Date().getTime();
   let delta = timestamp - lastReportedTimestamp;
   if (Math.abs(lastReportedTemperature - temperature) * (delta / (1000 * 60)) > 1) { // 1 degree 1 minute
