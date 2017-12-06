@@ -29,7 +29,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('input').addEventListener('keydown', function(evt) {
       if(evt.which === 13) {
-        webSocket.send(evt.currentTarget.value);
+        webSocket.send(JSON.stringify({type: 'textRecognized', text: evt.currentTarget.value}));
         evt.currentTarget.value = '';
         document.getElementById('output').innerText = '';
       }

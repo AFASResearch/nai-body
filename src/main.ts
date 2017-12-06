@@ -9,6 +9,7 @@ import {programLogic} from './logic/program-logic';
 import { createBuildStatusProcessor } from './build-status/build-status-processor';
 import { startWebserver } from './webserver';
 import {GpioService} from './services/gpio';
+import { createUdpService, MessageProcessor } from './services/udp-service';
 
 let config: any = require('../local-config.json');
 
@@ -19,9 +20,16 @@ let firebaseService: FirebaseService;
 
 let temperature: number | undefined;
 
+let processors: MessageProcessor[] = [];
+
+if (config.udp) {
+  processors.push(createUdpService(config.udp));
+}
+
 let messageLogic = createMessageLogic({
   getTemperature: () => temperature,
-  aboutLogic: programLogic
+  aboutLogic: programLogic,
+  processors
 });
 
 gpioService = {

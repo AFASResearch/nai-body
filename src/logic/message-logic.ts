@@ -1,4 +1,5 @@
 import {ProgramLogic, programLogic} from './program-logic';
+import { MessageProcessor } from '../services/udp-service';
 
 export interface MessageLogic {
   process(message: string, options: { toMe?: boolean, source: any }): Promise<string | undefined>;
@@ -6,8 +7,8 @@ export interface MessageLogic {
   registerBeforeExit(callback: () => void): void;
 }
 
-export let createMessageLogic = (config: { getTemperature: () => number | undefined, aboutLogic: ProgramLogic }): MessageLogic => {
-  let {getTemperature, aboutLogic} = config;
+export let createMessageLogic = (config: { getTemperature: () => number | undefined, aboutLogic: ProgramLogic, processors: MessageProcessor[] }): MessageLogic => {
+  let {getTemperature, aboutLogic, processors} = config;
   let diagnosticLogger = (msg: any) => undefined as void;
   let beforeExit = () => undefined as void;
 
@@ -20,6 +21,14 @@ export let createMessageLogic = (config: { getTemperature: () => number | undefi
     if (!toMe && words.indexOf('nai') !== -1) {
       toMe = true;
       words = words.filter(word => word !== 'nai');
+    }
+    if (toMe) {
+      for (let processor of processors) {
+        let result = processor.process(words);
+        if (result) {
+          return result;
+        }
+      }
     }
     let findWord = (word: string) => words.indexOf(word) !== -1;
     let findWords = (needles: string[]) => needles.some(findWord);
