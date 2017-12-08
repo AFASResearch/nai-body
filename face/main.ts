@@ -31,12 +31,36 @@ serial.onDataReceived(serial.delimiters(Delimiters.Comma), () => {
             . # # # .
             . . . . .
             `, 0)
+  } else if (command == "think-left") {
+    basic.showLeds(`
+            . # . # .
+            . . . . .
+            . . . . .
+            # # # . .
+            . . . . .
+            `, 0)
+  } else if (command == "think-right") {
+    basic.showLeds(`
+            . # . # .
+            . . . . .
+            . . . . .
+            . . # # #
+            . . . . .
+            `, 0)
   } else if (command == "speak") {
     basic.showLeds(`
             . # . # .
             . . . . .
             . # # # .
             # . . . #
+            . # # # .
+            `, 0)
+  } else if (command == "speak2") {
+    basic.showLeds(`
+            . # . # .
+            . . . . .
+            . . . . .
+            # # # # #
             . # # # .
             `, 0)
   } else if (command == "exit") {
