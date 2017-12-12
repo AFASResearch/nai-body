@@ -41,7 +41,8 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
   let faceAnimation: any | undefined;
   let stopAnimation = () => {
     if (faceAnimation) {
-      clearInterval(faceAnimation)
+      clearInterval(faceAnimation);
+      faceAnimation = undefined;
     }
   };
 
@@ -56,6 +57,8 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
         if (event.type === 'textRecognized' && event.text) {
           dependencies.messageLogic.process(event.text, {toMe: true, source: 'webserver'}).then((reply) => {
             if (reply) {
+              stopAnimation();
+              dependencies.microBit.sendCommand('asleep');
               ws.send(reply);
             }
           });
@@ -96,7 +99,7 @@ export let startWebserver = (config: WebserverConfig, dependencies: {messageLogi
           faceAnimation = setInterval(() => {
             speak2 = !speak2;
             dependencies.microBit.sendCommand(speak2 ? 'speak2' : 'speak');
-          }, 250);
+          }, 200);
         }
       } catch (e) {
         console.log('Could not process message received from webserver: ' + e);

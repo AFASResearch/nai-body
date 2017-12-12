@@ -72,7 +72,7 @@ serial.onDataReceived(serial.delimiters(Delimiters.Comma), () => {
             . . . . .
             `, 0)
   } else {
-    basic.showString(command);
+    basic.showIcon(IconNames.Ghost, 0);
   }
 });
 
