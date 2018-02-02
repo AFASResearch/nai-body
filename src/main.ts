@@ -126,4 +126,4 @@ if (config.webserver) {
   programLogic.beforeShutdown(server.stop);
 }
 
-// createBuildStatusProcessor({firebase: firebaseService});
+//createBuildStatusProcessor({firebase: firebaseService});
