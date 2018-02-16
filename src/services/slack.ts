@@ -24,7 +24,7 @@ export let createSlackService = (token: string, messageLogic: MessageLogic, prog
   };
 
   let logDiagnostic = (msg: any) => {
-    rtm.sendMessage(JSON.stringify(msg, undefined, 2), 'C3T18HUF3' /* nai-diagnostics */);
+    rtm.sendMessage(JSON.stringify(msg, undefined, 2).replace('@', '☏'), 'C3T18HUF3' /* nai-diagnostics */);
   };
 
   // you need to wait for the client to fully connect before you can send messages
