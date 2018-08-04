@@ -17,28 +17,28 @@
   },
   "homepage": "https://github.com/AFASResearch/nai-body#readme",
   "dependencies": {
-    "@slack/client": "3.14.1",
-    "@types/node": "8.0.50",
-    "@types/onoff": "0.0.27",
-    "@types/ws": "^3.2.0",
-    "firebase": "4.6.1",
-    "firebase-admin": "5.4.3",
+    "@slack/client": "4.3.1",
+    "@types/node": "10.5.5",
+    "@types/onoff": "0.0.28",
+    "@types/ws": "^5.1.2",
+    "firebase": "5.3.0",
+    "firebase-admin": "5.13.1",
     "node-cron": "1.2.1",
-    "node-fetch": "1.7.3",
-    "serialport": "6.0.4",
-    "ts-node": "3.3.0",
-    "typescript": "^2.1.5",
-    "ws": "^3.3.1"
+    "node-fetch": "2.2.0",
+    "serialport": "6.2.2",
+    "ts-node": "7.0.0",
+    "typescript": "^3.0.1",
+    "ws": "^6.0.0"
   },
   "optionalDependencies": {
-    "onoff": "^1.1.8",
-    "mcp-spi-adc": "1.0.0"
+    "onoff": "^3.2.1",
+    "mcp-spi-adc": "2.0.3"
   },
   "devDependencies": {
-    "@types/chai": "4.0.4",
-    "@types/mocha": "2.2.44",
-    "@types/serialport": "6.0.0",
+    "@types/chai": "4.1.4",
+    "@types/mocha": "5.2.5",
+    "@types/serialport": "6.0.4",
     "chai": "4.1.2",
-    "mocha": "4.0.1"
+    "mocha": "5.2.0"
   }
 }
